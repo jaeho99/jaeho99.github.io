@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { SITE } from '../data/site';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+<BaseLayout>
+  <section class="hero container">
+    <div>
+      <p class="eyebrow">Developer · Problem Solver · Learner</p>
+      <h1>배운 것을 넘어,<br /><em>해결한 것</em>을 기록합니다.</h1>
+    </div>
+    <p class="intro">{SITE.description}<br />선택의 근거와 시행착오까지 솔직하게 남기는 개발 블로그입니다.</p>
+  </section>
+
+  <section class="container recent">
+    <div class="section-head">
+      <div><p class="eyebrow">Recent notes</p><h2>최근 기록</h2></div>
+      <a href="/posts">모든 기록 보기 →</a>
+    </div>
+    <div>{posts.slice(0, 4).map(post => <PostCard post={post} />)}</div>
+  </section>
+
+  <section class="container principles">
+    <p class="eyebrow">How I write</p>
+    <div class="principle-grid">
+      <div><strong>01</strong><h3>문제부터 정의합니다</h3><p>무엇을 만들었는지보다 왜 문제가 되었는지 먼저 설명합니다.</p></div>
+      <div><strong>02</strong><h3>선택의 근거를 남깁니다</h3><p>기술과 구조를 선택할 때 고려한 대안과 트레이드오프를 기록합니다.</p></div>
+      <div><strong>03</strong><h3>결과를 검증합니다</h3><p>감상이 아닌 수치, 테스트와 회고를 통해 해결 여부를 확인합니다.</p></div>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .hero { min-height: 570px; display: grid; grid-template-columns: 1.6fr .7fr; align-items: center; gap: 70px; }
+  h1 { margin: 18px 0 0; font-size: clamp(3rem, 7vw, 6.3rem); line-height: 1.02; letter-spacing: -.075em; }
+  h1 em { color: var(--accent); font-style: normal; }
+  .intro { align-self: end; margin-bottom: 110px; color: var(--muted); font-size: 16px; }
+  .section-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 12px; }
+  .section-head h2 { margin: 5px 0; font-size: 2rem; }
+  .section-head > a { color: var(--accent); font-size: 14px; font-weight: 700; }
+  .principles { margin-top: 120px; padding: 54px; background: var(--surface); border: 1px solid var(--line); border-radius: 28px; }
+  .principle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 30px; }
+  .principle-grid strong { color: var(--accent); font-size: 13px; }
+  .principle-grid h3 { margin: 12px 0 8px; letter-spacing: -.03em; }
+  .principle-grid p { margin: 0; color: var(--muted); font-size: 14px; }
+  @media (max-width: 760px) {
+    .hero { min-height: 500px; display: block; padding-top: 90px; }
+    .intro { margin-top: 45px; }
+    .principles { padding: 32px 24px; }
+    .principle-grid { grid-template-columns: 1fr; }
+  }
+</style>
