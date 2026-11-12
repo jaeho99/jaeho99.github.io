@@ -2,40 +2,31 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { CATEGORIES } from '../../data/categories';
+import CategoryCard from '../../components/CategoryCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 ---
 <BaseLayout title="카테고리" description="개발 기록을 주제별로 모아봅니다.">
   <section class="container page-head">
+    <Breadcrumbs items={[{ label: '홈', href: '/' }, { label: '주제' }]} />
     <p class="eyebrow">Categories</p>
-    <h1>관심 있는 주제부터<br />골라보세요.</h1>
-    <p>세부 기술은 태그로, 글의 대표 주제는 카테고리로 분류합니다.</p>
+    <h1>필요한 맥락부터<br />찾아보세요.</h1>
+    <p>대표 주제로 글의 큰 흐름을 나누고, 각 글의 태그로 세부 기술을 표시합니다.</p>
   </section>
   <section class="container category-grid">
     {CATEGORIES.map(category => {
       const count = posts.filter(post => post.data.category === category.name).length;
-      return (
-        <a class="category-card" href={`/categories/${category.slug}/`}>
-          <span>{String(count).padStart(2, '0')} posts</span>
-          <h2>{category.name}</h2>
-          <p>{category.description}</p>
-          <strong>글 모아보기 →</strong>
-        </a>
-      );
+      return <CategoryCard category={category} count={count} />;
     })}
   </section>
 </BaseLayout>
 <style>
-  .page-head { padding: 110px 0 64px; }
+  .page-head { padding: 56px 0 54px; }
+  .eyebrow { margin-top: 56px; }
   h1 { margin: 8px 0 18px; font-size: clamp(3rem, 8vw, 5rem); line-height: 1.08; letter-spacing: -.06em; }
   .page-head > p:last-child { color: var(--muted); }
-  .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  .category-card { padding: 32px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); transition: transform .2s, border-color .2s; }
-  .category-card:hover { transform: translateY(-4px); border-color: var(--accent); }
-  .category-card > span { color: var(--accent); font-size: 12px; font-weight: 800; text-transform: uppercase; }
-  h2 { margin: 20px 0 10px; letter-spacing: -.04em; }
-  .category-card p { min-height: 78px; color: var(--muted); font-size: 14px; }
-  .category-card strong { color: var(--accent); font-size: 13px; }
+  .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
   @media (max-width: 760px) { .category-grid { grid-template-columns: 1fr; } .category-card p { min-height: 0; } }
 </style>
 

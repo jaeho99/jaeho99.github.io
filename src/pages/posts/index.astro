@@ -2,16 +2,27 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { CATEGORIES } from '../../data/categories';
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 <BaseLayout title="개발 기록" description="개발의 해상도 전체 글 목록">
-  <section class="container page-head"><p class="eyebrow">All notes</p><h1>개발 기록</h1><p>{posts.length}개의 문제와 배움을 기록했습니다. <a href="/categories">카테고리별로 보기 →</a></p></section>
+  <section class="container page-head"><Breadcrumbs items={[{ label: '홈', href: '/' }, { label: '전체 글' }]} /><p class="eyebrow">All notes</p><h1>전체 글</h1><p>{posts.length}개의 문제와 배움을 최신순으로 모았습니다.</p></section>
+  <nav class="container category-links" aria-label="주제별 글 보기">
+    {CATEGORIES.map(category => <a href={`/categories/${category.slug}/`}><span>{category.name}</span><strong>{posts.filter(post => post.data.category === category.name).length}</strong></a>)}
+  </nav>
   <section class="container list">{posts.map(post => <PostCard post={post} />)}</section>
 </BaseLayout>
 <style>
-  .page-head { padding: 110px 0 64px; }
+  .page-head { padding: 56px 0 40px; }
+  .eyebrow { margin-top: 56px; }
   h1 { margin: 8px 0; font-size: clamp(3rem, 8vw, 5rem); letter-spacing: -.06em; }
   .page-head > p:last-child { color: var(--muted); }
-  .page-head a { color: var(--accent); font-weight: 700; }
+  .category-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 48px; }
+  .category-links a { display: flex; justify-content: space-between; gap: 12px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--muted); font-size: 13px; font-weight: 700; }
+  .category-links a:hover { border-color: var(--accent); color: var(--accent); }
+  .category-links strong { color: var(--accent); }
   .list { max-width: 850px; }
+  @media (max-width: 760px) { .category-links { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 460px) { .category-links { grid-template-columns: 1fr; } }
 </style>

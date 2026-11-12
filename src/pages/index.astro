@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import { CATEGORIES } from '../data/categories';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -12,13 +14,23 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       <p class="eyebrow">Java · Spring · Backend Engineering</p>
       <h1>현상을 재현하고,<br /><em>해결 과정</em>을 기록합니다.</h1>
     </div>
-    <p class="intro">Java/Spring 백엔드 개발자<br />문제 해결과 성장의 기록입니다.<br /><a href="/roadmap">작성 중인 주제 보기 →</a></p>
+    <div class="intro"><p>Java/Spring 백엔드 개발자<br />문제 해결과 성장의 기록입니다.</p><div><a class="primary-link" href="/categories">주제별로 시작하기 →</a><a href="/about">블로그 소개</a></div></div>
+  </section>
+
+  <section class="container explore">
+    <div class="section-head">
+      <div><p class="eyebrow">Explore by topic</p><h2>주제별로 탐색하기</h2></div>
+      <a href="/categories">모든 주제 보기 →</a>
+    </div>
+    <div class="category-grid">
+      {CATEGORIES.map(category => <CategoryCard category={category} count={posts.filter(post => post.data.category === category.name).length} />)}
+    </div>
   </section>
 
   <section class="container recent">
     <div class="section-head">
       <div><p class="eyebrow">Recent notes</p><h2>최근 기록</h2></div>
-      <a href="/posts">모든 기록 보기 →</a>
+      <a href="/posts">전체 글 보기 →</a>
     </div>
     <div>{posts.slice(0, 4).map(post => <PostCard post={post} />)}</div>
   </section>
@@ -33,12 +45,18 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   </section>
 </BaseLayout>
 <style>
-  .hero { min-height: 570px; display: grid; grid-template-columns: 1.6fr .7fr; align-items: center; gap: 70px; }
+  .hero { min-height: 520px; display: grid; grid-template-columns: 1.6fr .7fr; align-items: center; gap: 70px; }
+  .hero > * { min-width: 0; }
   h1 { margin: 18px 0 0; font-size: clamp(3rem, 7vw, 6.3rem); line-height: 1.02; letter-spacing: -.075em; }
   h1 em { color: var(--accent); font-style: normal; }
-  .intro { align-self: end; margin-bottom: 110px; color: var(--muted); font-size: 16px; }
-  .intro a { color: var(--accent); font-weight: 700; }
-  .section-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 12px; }
+  .intro { align-self: center; color: var(--muted); font-size: 16px; }
+  .intro p { margin: 0 0 24px; }
+  .intro div { display: flex; flex-wrap: wrap; gap: 12px 18px; }
+  .intro a { color: var(--text); font-size: 14px; font-weight: 700; }
+  .intro .primary-link { color: var(--accent); }
+  .explore { margin-bottom: 100px; }
+  .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 18px; }
   .section-head h2 { margin: 5px 0; font-size: 2rem; }
   .section-head > a { color: var(--accent); font-size: 14px; font-weight: 700; }
   .principles { margin-top: 120px; padding: 54px; background: var(--surface); border: 1px solid var(--line); border-radius: 28px; }
@@ -47,8 +65,11 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .principle-grid h3 { margin: 12px 0 8px; letter-spacing: -.03em; }
   .principle-grid p { margin: 0; color: var(--muted); font-size: 14px; }
   @media (max-width: 760px) {
-    .hero { min-height: 500px; display: block; padding-top: 90px; }
-    .intro { margin-top: 45px; }
+    .hero { min-height: 480px; display: block; padding-top: 72px; }
+    h1 { font-size: clamp(2.65rem, 13vw, 4rem); overflow-wrap: anywhere; line-height: 1.06; }
+    .intro { margin-top: 36px; }
+    .category-grid { grid-template-columns: 1fr; }
+    .section-head { align-items: flex-start; flex-direction: column; gap: 6px; }
     .principles { padding: 32px 24px; }
     .principle-grid { grid-template-columns: 1fr; }
   }

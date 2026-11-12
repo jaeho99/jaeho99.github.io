@@ -9,6 +9,8 @@ interface Props {
 const { title = SITE.title, description = SITE.description } = Astro.props;
 const pageTitle = title === SITE.title ? title : `${title} | ${SITE.title}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname;
+const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
 ---
 
 <!doctype html>
@@ -29,31 +31,42 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
     <header class="site-header">
       <a class="brand" href="/" aria-label="홈으로">
         <span class="brand-mark">JH</span>
         <span>{SITE.title}</span>
       </a>
-      <nav aria-label="주요 메뉴">
-        <a href="/posts">기록</a>
-        <a href="/categories">카테고리</a>
-        <a href="/roadmap">로드맵</a>
-        <a href="/about">소개</a>
-        <a href="/rss.xml">RSS</a>
-        <button id="theme-toggle" aria-label="색상 모드 변경">◐</button>
+      <nav class="desktop-nav" aria-label="주요 메뉴">
+        <a class:list={{ active: isActive('/posts') }} aria-current={isActive('/posts') ? 'page' : undefined} href="/posts">전체 글</a>
+        <a class:list={{ active: isActive('/categories') }} aria-current={isActive('/categories') ? 'page' : undefined} href="/categories">주제</a>
+        <a class:list={{ active: isActive('/roadmap') }} aria-current={isActive('/roadmap') ? 'page' : undefined} href="/roadmap">로드맵</a>
+        <a class:list={{ active: isActive('/about') }} aria-current={isActive('/about') ? 'page' : undefined} href="/about">소개</a>
+        <button class="theme-toggle" aria-label="색상 모드 변경">◐</button>
       </nav>
+      <details class="mobile-menu">
+        <summary aria-label="메뉴 열기">메뉴</summary>
+        <nav aria-label="모바일 메뉴">
+          <a href="/posts">전체 글</a><a href="/categories">주제별 보기</a><a href="/roadmap">로드맵</a><a href="/about">소개</a><a href="/rss.xml">RSS</a>
+          <button class="theme-toggle" aria-label="색상 모드 변경">색상 모드</button>
+        </nav>
+      </details>
     </header>
-    <main><slot /></main>
+    <main id="main-content"><slot /></main>
     <footer>
-      <span>© {new Date().getFullYear()} {SITE.author}</span>
-      <span>Built with Astro · 기록은 계속됩니다.</span>
+      <div><strong>{SITE.title}</strong><span>현상을 재현하고 해결 과정을 기록합니다.</span></div>
+      <div class="footer-links"><a href="/categories">주제</a><a href="/about">소개</a><a href="/rss.xml">RSS</a><span>© {new Date().getFullYear()} {SITE.author}</span></div>
     </footer>
     <script>
-      document.querySelector('#theme-toggle')?.addEventListener('click', () => {
-        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = next;
-        localStorage.setItem('theme', next);
-      });
+      document.querySelectorAll('.theme-toggle').forEach(button => button.addEventListener('click', () => {
+          const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = next;
+          localStorage.setItem('theme', next);
+        })
+      );
+      document.querySelectorAll('.mobile-menu a').forEach(link => link.addEventListener('click', () => {
+        link.closest('details')?.removeAttribute('open');
+      }));
     </script>
   </body>
 </html>
@@ -88,8 +101,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     color: var(--text);
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     line-height: 1.75;
+    overflow-x: hidden;
   }
+  img { max-width: 100%; height: auto; }
   a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .skip-link { position: fixed; z-index: 100; top: 12px; left: 12px; padding: 8px 14px; border-radius: 8px; background: var(--accent); color: var(--surface); transform: translateY(-150%); }
+  .skip-link:focus { transform: translateY(0); }
   .site-header, footer {
     width: min(calc(100% - 40px), var(--max));
     margin-inline: auto;
@@ -103,28 +121,41 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     display: grid; place-items: center; width: 38px; height: 38px;
     color: var(--surface); background: var(--accent); border-radius: 12px; font-size: 13px;
   }
-  nav { display: flex; align-items: center; gap: 24px; font-size: 14px; font-weight: 650; }
-  nav a:hover { color: var(--accent); }
-  #theme-toggle { border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--text); width: 34px; height: 34px; cursor: pointer; }
+  .desktop-nav { display: flex; align-items: center; gap: 24px; font-size: 14px; font-weight: 650; }
+  .desktop-nav a:hover, .desktop-nav a.active { color: var(--accent); }
+  .desktop-nav a.active { text-decoration: underline; text-underline-offset: 7px; }
+  .theme-toggle { border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--text); min-width: 34px; height: 34px; cursor: pointer; }
+  .mobile-menu { display: none; position: relative; }
   main { min-height: calc(100vh - 200px); }
-  footer { border-top: 1px solid var(--line); margin-top: 96px; padding: 28px 0 44px; color: var(--muted); font-size: 13px; }
+  footer { border-top: 1px solid var(--line); margin-top: 96px; padding: 34px 0 48px; color: var(--muted); font-size: 13px; }
+  footer > div, .footer-links { display: flex; gap: 18px; align-items: center; }
+  footer strong { color: var(--text); }
+  .footer-links a:hover { color: var(--accent); }
   .container { width: min(calc(100% - 40px), var(--max)); margin-inline: auto; }
   .eyebrow { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
   .tag { display: inline-flex; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 700; }
-  .prose { width: min(calc(100% - 40px), 760px); margin: 64px auto; }
+  .prose { width: min(calc(100% - 40px), 760px); min-width: 0; margin: 64px auto; overflow-wrap: anywhere; }
   .prose h1 { font-size: clamp(2.2rem, 7vw, 4rem); line-height: 1.14; letter-spacing: -.055em; }
   .prose h2 { margin-top: 2.4em; line-height: 1.35; letter-spacing: -.03em; }
   .prose p, .prose li { color: var(--text); }
+  .prose li + li { margin-top: .35em; }
   .prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
   .prose pre { overflow-x: auto; padding: 20px; border-radius: 14px; background: #111813; color: #e8f0e9; }
   .prose :not(pre) > code { padding: 2px 6px; border-radius: 5px; background: var(--code); }
+  .prose table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 14px; }
+  .prose th, .prose td { min-width: 110px; padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .prose blockquote { margin-inline: 0; padding: 12px 18px; border-left: 4px solid var(--accent); background: var(--surface); color: var(--muted); }
   @media (max-width: 640px) {
     .site-header { height: 72px; }
-    .brand > span:last-child { display: none; }
-    nav { gap: 13px; }
-    nav a[href='/posts'] { display: none; }
-    nav a[href='/rss.xml'] { display: none; }
-    footer { display: block; }
-    footer span { display: block; }
+    .desktop-nav { display: none; }
+    .mobile-menu { display: block; }
+    .mobile-menu summary { padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; font-weight: 750; cursor: pointer; list-style: none; }
+    .mobile-menu summary::-webkit-details-marker { display: none; }
+    .mobile-menu nav { position: absolute; z-index: 20; top: 46px; right: 0; display: grid; width: 190px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: 0 16px 36px rgba(0,0,0,.14); }
+    .mobile-menu nav a, .mobile-menu nav button { padding: 10px 12px; text-align: left; font-size: 14px; font-weight: 700; }
+    .mobile-menu .theme-toggle { width: 100%; height: auto; border: 0; border-radius: 8px; }
+    footer, footer > div, .footer-links { display: flex; align-items: flex-start; flex-direction: column; gap: 8px; }
+    .footer-links { margin-top: 18px; }
+    .prose { margin-top: 42px; }
   }
 </style>

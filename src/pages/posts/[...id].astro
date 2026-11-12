@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCategoryByName } from '../../data/categories';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -9,28 +10,94 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const date = post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 const category = getCategoryByName(post.data.category);
+const toc = headings.filter(heading => heading.depth === 2);
+const wordCount = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.ceil(wordCount / 350));
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const currentIndex = allPosts.findIndex(item => item.id === post.id);
+const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
+const olderPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
 ---
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <article class="prose">
-    <header class="article-head">
-      <a class="back" href="/posts">← 모든 기록</a>
-      {category && <a class="category" href={`/categories/${category.slug}/`}>{category.name}</a>}
+  <article class="article">
+    <header class="article-head container">
+      <Breadcrumbs items={[
+        { label: '홈', href: '/' },
+        { label: '주제', href: '/categories' },
+        ...(category ? [{ label: category.name, href: `/categories/${category.slug}/` }] : []),
+        { label: post.data.title },
+      ]} />
+      <div class="article-labels">
+        {category && <a class="category" href={`/categories/${category.slug}/`}>{category.name}</a>}
+        <span>{readingMinutes}분 읽기</span>
+      </div>
       <div class="tags">{post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}</div>
       <h1>{post.data.title}</h1>
       <p class="description">{post.data.description}</p>
       <time datetime={post.data.pubDate.toISOString()}>{date}</time>
     </header>
-    <Content />
+    <div class="article-layout container">
+      <div class="content-column">
+        {toc.length >= 3 && (
+          <details class="mobile-toc">
+            <summary>이 글의 목차</summary>
+            <ol>{toc.map(heading => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol>
+          </details>
+        )}
+        <div class="prose article-body"><Content /></div>
+      </div>
+      {toc.length >= 3 && (
+        <aside class="toc" aria-label="이 글의 목차">
+          <strong>이 글의 목차</strong>
+          <ol>{toc.map(heading => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol>
+        </aside>
+      )}
+    </div>
+    <nav class="post-navigation container" aria-label="이전 글과 다음 글">
+      {olderPost ? <a href={`/posts/${olderPost.id}/`}><span>이전 글</span><strong>{olderPost.data.title}</strong></a> : <span></span>}
+      {newerPost ? <a class="newer" href={`/posts/${newerPost.id}/`}><span>다음 글</span><strong>{newerPost.data.title}</strong></a> : <span></span>}
+    </nav>
   </article>
 </BaseLayout>
 <style>
-  .article-head { margin-bottom: 70px; }
-  .back { display: block; margin-bottom: 60px; color: var(--accent); font-size: 14px; font-weight: 700; }
-  .tags { display: flex; gap: 7px; }
-  .category { display: inline-flex; margin-bottom: 10px; color: var(--accent); font-size: 13px; font-weight: 800; }
-  .description { color: var(--muted); font-size: 1.15rem; }
+  .article-head { max-width: 900px; padding-top: 56px; padding-bottom: 64px; }
+  .article-labels { display: flex; align-items: center; gap: 10px; margin-top: 54px; color: var(--muted); font-size: 13px; }
+  .article-labels span::before { content: '·'; margin-right: 10px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+  .category { color: var(--accent); font-weight: 800; }
+  h1 { margin: 28px 0 22px; overflow-wrap: anywhere; font-size: clamp(2.3rem, 6vw, 4.4rem); line-height: 1.1; letter-spacing: -.06em; }
+  .description { max-width: 720px; color: var(--muted); font-size: 1.15rem; }
   time { color: var(--muted); font-size: 13px; }
+  .article-layout { display: grid; grid-template-columns: minmax(0, 760px) 220px; justify-content: space-between; gap: 60px; align-items: start; }
+  .content-column { min-width: 0; }
+  .article-body { width: 100%; margin: 0; }
+  .mobile-toc { display: none; margin-bottom: 32px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  .mobile-toc summary { color: var(--accent); font-size: 14px; font-weight: 800; cursor: pointer; }
+  .mobile-toc ol { margin: 14px 0 2px; padding-left: 22px; }
+  .mobile-toc li + li { margin-top: 7px; }
+  .mobile-toc a { color: var(--muted); font-size: 13px; }
+  .toc { position: sticky; top: 28px; max-height: calc(100vh - 56px); overflow-y: auto; padding-left: 18px; border-left: 1px solid var(--line); }
+  .toc strong { font-size: 13px; }
+  .toc ol { margin: 14px 0 0; padding: 0; list-style: none; }
+  .toc li + li { margin-top: 9px; }
+  .toc a { display: block; color: var(--muted); font-size: 12px; line-height: 1.45; }
+  .toc a:hover { color: var(--accent); }
+  .post-navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 84px; }
+  .post-navigation a { min-width: 0; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .post-navigation a:hover { border-color: var(--accent); }
+  .post-navigation span { display: block; margin-bottom: 7px; color: var(--accent); font-size: 12px; font-weight: 800; }
+  .post-navigation strong { display: block; overflow-wrap: anywhere; line-height: 1.4; }
+  .post-navigation .newer { text-align: right; }
+  @media (max-width: 900px) { .article-layout { display: block; } .toc { display: none; } .mobile-toc { display: block; } }
+  @media (max-width: 640px) {
+    .article-head { padding-top: 34px; padding-bottom: 48px; }
+    .article-labels { margin-top: 40px; }
+    h1 { font-size: clamp(2rem, 10vw, 2.8rem); line-height: 1.12; }
+    .description { font-size: 1rem; }
+    .post-navigation { grid-template-columns: 1fr; margin-top: 60px; }
+    .post-navigation .newer { text-align: left; }
+  }
 </style>

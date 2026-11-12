@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 const topics = [
   ['01', 'Spring MVC에서 Ajax 요청 시 JSON 대신 JSP가 반환되는 이유', '작성 완료'],
@@ -16,6 +17,7 @@ const topics = [
 ---
 <BaseLayout title="콘텐츠 로드맵" description="개발의 해상도에서 다룰 주제와 작성 원칙입니다.">
   <article class="prose roadmap">
+    <Breadcrumbs items={[{ label: '홈', href: '/' }, { label: '로드맵' }]} />
     <p class="eyebrow">Content roadmap</p>
     <h1>문제를 모으는 대신,<br />해결 과정을 쌓습니다.</h1>
     <p class="lead">실무에서 반복해서 마주치는 Java/Spring 백엔드 문제를 재현 가능한 글과 예제로 정리합니다. 일정은 품질과 검증 결과에 따라 조정됩니다.</p>
@@ -44,6 +46,7 @@ const topics = [
 </BaseLayout>
 <style>
   .roadmap { padding-top: 60px; }
+  .eyebrow { margin-top: 54px; }
   .lead { margin: 36px 0 64px; color: var(--muted); font-size: 1.15rem; }
   .process { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
   .process li { display: flex; flex-direction: column; gap: 8px; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }

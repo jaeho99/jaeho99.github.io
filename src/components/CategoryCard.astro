@@ -1,0 +1,24 @@
+---
+interface Props {
+  category: { slug: string; name: string; description: string };
+  count: number;
+}
+
+const { category, count } = Astro.props;
+---
+<a class="category-card" href={`/categories/${category.slug}/`}>
+  <span>{String(count).padStart(2, '0')} posts</span>
+  <h3>{category.name}</h3>
+  <p>{category.description}</p>
+  <strong>글 모아보기 <span aria-hidden="true">→</span></strong>
+</a>
+<style>
+  .category-card { display: flex; min-width: 0; min-height: 220px; flex-direction: column; padding: 28px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); transition: transform .2s, border-color .2s; }
+  .category-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .category-card > span { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  h3 { margin: 18px 0 8px; overflow-wrap: anywhere; font-size: 1.3rem; line-height: 1.3; letter-spacing: -.035em; }
+  p { margin: 0 0 22px; color: var(--muted); font-size: 14px; }
+  strong { margin-top: auto; color: var(--accent); font-size: 13px; }
+  @media (max-width: 760px) { .category-card { min-height: 0; } }
+</style>
+
