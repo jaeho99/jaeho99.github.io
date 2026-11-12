@@ -2,7 +2,8 @@
 title: 'CI/CD 개념과 용어, 파이프라인 종류 한 번에 정리하기'
 description: '지속적 통합·전달·배포의 차이부터 Stage, Job, Artifact, Runner 같은 용어와 브랜치·PR·모노레포 파이프라인 및 배포 전략을 정리합니다.'
 pubDate: 2026-11-12
-category: 'DevOps · Infrastructure'
+category: 'DevOps'
+subcategory: 'CI/CD'
 tags: ['CI/CD', 'DevOps', 'GitHub Actions', 'Deployment']
 draft: false
 ---

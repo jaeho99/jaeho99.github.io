@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCategoryByName } from '../../data/categories';
+import { getCategoryByName, getCategoryPath, getSubcategoryByName } from '../../data/categories';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 export async function getStaticPaths() {
@@ -13,6 +13,7 @@ const { post } = Astro.props;
 const { Content, headings } = await render(post);
 const date = post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 const category = getCategoryByName(post.data.category);
+const subcategory = getSubcategoryByName(post.data.category, post.data.subcategory);
 const toc = headings.filter(heading => heading.depth === 2);
 const wordCount = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
 const readingMinutes = Math.max(1, Math.ceil(wordCount / 350));
@@ -27,11 +28,12 @@ const olderPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1
       <Breadcrumbs items={[
         { label: '홈', href: '/' },
         { label: '주제', href: '/categories' },
-        ...(category ? [{ label: category.name, href: `/categories/${category.slug}/` }] : []),
+        ...(category ? [{ label: category.name, href: getCategoryPath(category.name) }] : []),
+        ...(subcategory ? [{ label: subcategory.name, href: getCategoryPath(category?.name ?? '', subcategory.name) }] : []),
         { label: post.data.title },
       ]} />
       <div class="article-labels">
-        {category && <a class="category" href={`/categories/${category.slug}/`}>{category.name}</a>}
+        {category && <a class="category" href={getCategoryPath(category.name, subcategory?.name)}>{category.name}{subcategory ? ` · ${subcategory.name}` : ''}</a>}
         <span>{readingMinutes}분 읽기</span>
       </div>
       <div class="tags">{post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}</div>

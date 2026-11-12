@@ -2,7 +2,8 @@
 title: "서버 없이 동작하는 랜덤 팀 배정 프로그램 설계"
 description: "볼링장 대형 모니터에서 사용할 일회성 팀 배정 도구를 단일 HTML, Web Crypto API와 카드 뽑기 UX로 구현했습니다."
 pubDate: 2026-08-25
-category: "Project · Retrospective"
+category: "Projects"
+subcategory: "Personal Project"
 tags: ["Codex", "JavaScript", "Web Crypto API", "프로젝트"]
 ---
 

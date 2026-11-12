@@ -2,7 +2,8 @@
 title: "Codex와 만든 오프라인 캡슐 점수 계산기"
 description: "볼링 경기 중 남은 선수들이 몇 점을 쳐야 하는지 바로 계산하는 PWA를 요구사항부터 배포까지 반복 개선한 과정입니다."
 pubDate: 2026-08-25
-category: "Project · Retrospective"
+category: "Projects"
+subcategory: "Personal Project"
 tags: ["Codex", "React", "PWA", "프로젝트"]
 ---
 

@@ -2,7 +2,8 @@
 title: 'Vue.js 기초: 반응성부터 컴포넌트까지 한 번에 이해하기'
 description: 'Vue 3와 Composition API를 기준으로 프로젝트 생성, 템플릿 문법, 반응형 상태, 디렉티브, 폼 바인딩과 컴포넌트 통신을 정리합니다.'
 pubDate: 2026-11-12
-category: 'JavaScript · Frontend'
+category: 'Frontend'
+subcategory: 'Vue'
 tags: ['Vue.js', 'Vue 3', 'Composition API', 'JavaScript']
 draft: false
 ---

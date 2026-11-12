@@ -2,7 +2,8 @@
 title: "Redis Pub/Sub과 WebSocket으로 실시간 채팅 구현하기"
 description: "MarketClip에서 채팅 메시지 발행, WebSocket 전달, DB 저장과 서버 재시작 복구를 어떻게 연결했는지 정리했습니다."
 pubDate: 2026-08-25
-category: "Java · Spring"
+category: "Backend"
+subcategory: "Spring"
 tags: ["Redis", "WebSocket", "Spring Boot", "실시간 통신"]
 ---
 

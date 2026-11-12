@@ -2,7 +2,8 @@
 title: "BowlingHub: 볼링장 운영 기능을 하나의 Spring 앱으로 만들기"
 description: "회원, 점수, 랭킹, 모임과 캡슐 이벤트를 통합하고 세션 권한·Flyway·47개 테스트로 검증한 BowlingHub 개발 회고입니다."
 pubDate: 2026-08-25
-category: "Java · Spring"
+category: "Projects"
+subcategory: "Personal Project"
 tags: ["Codex", "Spring Boot", "Spring Security", "테스트"]
 ---
 

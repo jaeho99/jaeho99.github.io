@@ -2,7 +2,8 @@
 title: '웹스퀘어 기초: 화면 XML, DataCollection과 Submission 이해하기'
 description: '웹스퀘어5 화면 개발의 구성 요소, 이벤트, DataMap·DataList, 데이터 바인딩과 Submission 통신 흐름을 정리합니다.'
 pubDate: 2026-11-12
-category: 'JavaScript · Frontend'
+category: 'Frontend'
+subcategory: 'WebSquare'
 tags: ['WebSquare5', 'DataCollection', 'Submission', 'Enterprise UI']
 draft: false
 ---

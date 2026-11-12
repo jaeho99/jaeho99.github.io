@@ -2,7 +2,8 @@
 title: '넥사크로 기초: Form, Dataset, Grid와 transaction 흐름 이해하기'
 description: '넥사크로 화면 개발에서 자주 사용하는 Form, 컴포넌트, Dataset, 데이터 바인딩, 이벤트와 서버 통신 구조를 정리합니다.'
 pubDate: 2026-11-12
-category: 'JavaScript · Frontend'
+category: 'Frontend'
+subcategory: 'Nexacro'
 tags: ['Nexacro', 'Dataset', 'Grid', 'Enterprise UI']
 draft: false
 ---

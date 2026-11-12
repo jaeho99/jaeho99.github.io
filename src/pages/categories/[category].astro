@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { CATEGORIES } from '../../data/categories';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return CATEGORIES.filter(category => posts.some(post => post.data.category === category.name)).map(category => ({
+    params: { category: category.slug },
+    props: {
+      category,
+      posts: posts.filter(post => post.data.category === category.name).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+      subcategories: category.subcategories.map(subcategory => ({
+        ...subcategory,
+        count: posts.filter(post => post.data.category === category.name && post.data.subcategory === subcategory.name).length,
+      })).filter(subcategory => subcategory.count > 0),
+    },
+  }));
+}
+
+const { category, posts, subcategories } = Astro.props;
+---
+<BaseLayout title={category.name} description={category.description}>
+  <section class="container page-head">
+    <Breadcrumbs items={[{ label: '홈', href: '/' }, { label: '주제', href: '/categories' }, { label: category.name }]} />
+    <p class="eyebrow">Category</p>
+    <h1>{category.name}</h1>
+    <p>{category.description} · {posts.length}개의 글</p>
+  </section>
+  <nav class="container subcategories" aria-label={`${category.name} 세부 주제`}>
+    {subcategories.map((subcategory: any) => <a href={`/categories/${category.slug}/${subcategory.slug}/`}><span>{subcategory.name}</span><strong>{subcategory.count}</strong></a>)}
+  </nav>
+  <section class="container list">{posts.map((post: any) => <PostCard post={post} />)}</section>
+</BaseLayout>
+<style>
+  .page-head { padding: 56px 0 36px; }
+  .eyebrow { margin-top: 42px; }
+  h1 { margin: 8px 0; font-size: clamp(3rem, 8vw, 5rem); letter-spacing: -.06em; }
+  .page-head > p:last-child { color: var(--muted); }
+  .subcategories { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 38px; }
+  .subcategories a { display: inline-flex; align-items: center; gap: 10px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 13px; font-weight: 700; }
+  .subcategories a:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .subcategories strong { color: var(--accent); font-size: 12px; }
+  .list { max-width: 850px; }
+</style>

@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import { CATEGORIES } from '../../../data/categories';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return CATEGORIES.flatMap(category => category.subcategories.map(subcategory => ({ category, subcategory })))
+    .filter(({ category, subcategory }) => posts.some(post => post.data.category === category.name && post.data.subcategory === subcategory.name))
+    .map(({ category, subcategory }) => ({
+      params: { category: category.slug, subcategory: subcategory.slug },
+      props: {
+        category,
+        subcategory,
+        posts: posts.filter(post => post.data.category === category.name && post.data.subcategory === subcategory.name).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+      },
+    }));
+}
+
+const { category, subcategory, posts } = Astro.props;
+---
+<BaseLayout title={`${subcategory.name} · ${category.name}`} description={`${category.name}의 ${subcategory.name} 관련 개발 기록`}>
+  <section class="container page-head">
+    <Breadcrumbs items={[{ label: '홈', href: '/' }, { label: '주제', href: '/categories' }, { label: category.name, href: `/categories/${category.slug}/` }, { label: subcategory.name }]} />
+    <p class="eyebrow">{category.name}</p>
+    <h1>{subcategory.name}</h1>
+    <p>{category.name}에서 다룬 {subcategory.name} 기록 · {posts.length}개의 글</p>
+  </section>
+  <nav class="container parent-link" aria-label="상위 주제로 이동"><a href={`/categories/${category.slug}/`}>← {category.name} 전체 보기</a></nav>
+  <section class="container list">{posts.map((post: any) => <PostCard post={post} />)}</section>
+</BaseLayout>
+<style>
+  .page-head { padding: 56px 0 30px; }
+  .eyebrow { margin-top: 42px; }
+  h1 { margin: 8px 0; overflow-wrap: anywhere; font-size: clamp(3rem, 8vw, 5rem); letter-spacing: -.06em; }
+  .page-head > p:last-child { color: var(--muted); }
+  .parent-link { margin-bottom: 38px; }
+  .parent-link a { color: var(--accent); font-size: 13px; font-weight: 800; }
+  .list { max-width: 850px; }
+</style>

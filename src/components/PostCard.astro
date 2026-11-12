@@ -2,13 +2,14 @@
 interface Props {
   post: any;
 }
-import { getCategoryByName } from '../data/categories';
+import { getCategoryByName, getCategoryPath, getSubcategoryByName } from '../data/categories';
 const { post } = Astro.props;
 const date = post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 const category = getCategoryByName(post.data.category);
+const subcategory = getSubcategoryByName(post.data.category, post.data.subcategory);
 ---
 <article class="post-card">
-  <div class="meta"><time datetime={post.data.pubDate.toISOString()}>{date}</time><span>·</span>{category && <a href={`/categories/${category.slug}/`}>{category.name}</a>}</div>
+  <div class="meta"><time datetime={post.data.pubDate.toISOString()}>{date}</time><span>·</span>{category && <a href={getCategoryPath(category.name)}>{category.name}</a>}{subcategory && <><span>›</span><a href={getCategoryPath(category?.name ?? '', subcategory.name)}>{subcategory.name}</a></>}</div>
   <h2><a href={`/posts/${post.id}/`}>{post.data.title}</a></h2>
   <p>{post.data.description}</p>
   <div class="tags">{post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}</div>

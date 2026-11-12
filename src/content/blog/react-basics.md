@@ -2,7 +2,8 @@
 title: 'React 기초: 컴포넌트, Props, State와 Hook 이해하기'
 description: '함수형 컴포넌트를 기준으로 JSX, Props, 이벤트, State, 목록 렌더링, 상태 끌어올리기와 Effect의 역할을 정리합니다.'
 pubDate: 2026-11-12
-category: 'JavaScript · Frontend'
+category: 'Frontend'
+subcategory: 'React'
 tags: ['React', 'JavaScript', 'JSX', 'Hooks']
 draft: false
 ---

@@ -2,7 +2,8 @@
 title: "MarketClip: 숏폼 중고거래 서비스 백엔드 개발 회고"
 description: "실시간 채팅과 거래 상태 관리가 결합된 중고거래 서비스를 만들며 맡았던 역할과 배운 점을 정리했습니다."
 pubDate: 2026-08-25
-category: "Project · Retrospective"
+category: "Projects"
+subcategory: "Team Project"
 tags: ["Spring Boot", "Redis", "WebSocket", "프로젝트"]
 ---
 

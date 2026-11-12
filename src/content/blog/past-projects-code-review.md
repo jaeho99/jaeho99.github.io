@@ -2,7 +2,8 @@
 title: "과거 프로젝트를 다시 읽으며 발견한 성장 포인트"
 description: "MarketClip부터 최근 개인 프로젝트까지 GitHub 저장소를 다시 살펴보고, 다음 프로젝트에서 바꿀 개발 방식을 정리했습니다."
 pubDate: 2026-08-25
-category: "Project · Retrospective"
+category: "Projects"
+subcategory: "Retrospective"
 tags: ["회고", "코드 리뷰", "성장"]
 ---
 

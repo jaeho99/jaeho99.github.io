@@ -2,7 +2,8 @@
 title: 'Java DateTimeFormatter 사용법과 날짜 유효성 검사: LocalDate와 STRICT'
 description: 'YYMMDD 문자열을 실제 날짜로 검증하고 기간 순서를 확인한 뒤 MyBatis와 Oracle 검색 조건에 안전하게 전달하는 방법을 정리합니다.'
 pubDate: 2026-11-12
-category: 'Java · Spring'
+category: 'Backend'
+subcategory: 'Java'
 tags: ['Java 8', 'DateTimeFormatter', 'LocalDate', 'MyBatis', 'Oracle']
 draft: false
 ---

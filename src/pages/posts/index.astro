@@ -5,11 +5,12 @@ import PostCard from '../../components/PostCard.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { CATEGORIES } from '../../data/categories';
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const visibleCategories = CATEGORIES.map(category => ({ category, count: posts.filter(post => post.data.category === category.name).length })).filter(item => item.count > 0);
 ---
 <BaseLayout title="개발 기록" description="개발의 해상도 전체 글 목록">
   <section class="container page-head"><Breadcrumbs items={[{ label: '홈', href: '/' }, { label: '전체 글' }]} /><p class="eyebrow">All notes</p><h1>전체 글</h1><p>{posts.length}개의 문제와 배움을 최신순으로 모았습니다.</p></section>
   <nav class="container category-links" aria-label="주제별 글 보기">
-    {CATEGORIES.map(category => <a href={`/categories/${category.slug}/`}><span>{category.name}</span><strong>{posts.filter(post => post.data.category === category.name).length}</strong></a>)}
+    {visibleCategories.map(({ category, count }) => <a href={`/categories/${category.slug}/`}><span>{category.name}</span><strong>{count}</strong></a>)}
   </nav>
   <section class="container list">{posts.map(post => <PostCard post={post} />)}</section>
 </BaseLayout>
