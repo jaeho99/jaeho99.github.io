@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const topics = [
+  ['01', 'Spring MVC에서 Ajax 요청 시 JSON 대신 JSP가 반환되는 이유', '작성 완료'],
+  ['02', '@ResponseBody 없이 Ajax에 JSON 반환하기', '기획'],
+  ['03', 'Ajax success와 error를 가르는 기준', '기획'],
+  ['04', 'Ajax 요청에서 redirect가 기대와 다르게 동작하는 이유', '기획'],
+  ['05', 'MyBatis 동적 쿼리: WHERE와 TRIM의 차이', '기획'],
+  ['06', 'MyBatis foreach로 다중 삭제 구현하기', '기획'],
+  ['07', 'Oracle Sequence 권한과 ORA-01031 해결', '기획'],
+  ['08', 'JSP와 jQuery로 동적 테이블 다루기', '기획'],
+  ['09', 'Controller · Service · DAO의 역할 경계', '기획'],
+  ['10', 'Java 8 레거시 프로젝트를 Spring Boot로 옮기는 기준', '기획'],
+];
+---
+<BaseLayout title="콘텐츠 로드맵" description="재호의 백엔드 개발 기록에서 다룰 주제와 작성 원칙입니다.">
+  <article class="prose roadmap">
+    <p class="eyebrow">Content roadmap</p>
+    <h1>문제를 모으는 대신,<br />해결 과정을 쌓습니다.</h1>
+    <p class="lead">실무에서 반복해서 마주치는 Java/Spring 백엔드 문제를 재현 가능한 글과 예제로 정리합니다. 일정은 품질과 검증 결과에 따라 조정됩니다.</p>
+
+    <h2>작성 순서</h2>
+    <ol class="process">
+      <li><strong>재현</strong><span>증상과 실행 환경을 최소 예제로 분리합니다.</span></li>
+      <li><strong>분석</strong><span>공식 문서와 실제 흐름을 따라 원인을 확인합니다.</span></li>
+      <li><strong>비교</strong><span>가능한 해결책과 트레이드오프를 함께 정리합니다.</span></li>
+      <li><strong>검증</strong><span>테스트 범위와 확인하지 못한 항목을 구분합니다.</span></li>
+      <li><strong>공개</strong><span>민감 정보를 제거하고 독립 예제와 함께 발행합니다.</span></li>
+    </ol>
+
+    <h2>첫 번째 시리즈</h2>
+    <div class="topic-list">
+      {topics.map(([number, title, status]) => (
+        <div class="topic">
+          <span class="number">{number}</span><strong>{title}</strong><span class:list={['status', status === '작성 완료' && 'done']}>{status}</span>
+        </div>
+      ))}
+    </div>
+
+    <h2>발행 채널</h2>
+    <p>이 사이트를 원문이 보관되는 공식 블로그로 사용합니다. GitHub에는 재현 코드와 변경 이력을 남기고, Velog에는 핵심 요약과 원문 링크를 게시합니다.</p>
+  </article>
+</BaseLayout>
+<style>
+  .roadmap { padding-top: 60px; }
+  .lead { margin: 36px 0 64px; color: var(--muted); font-size: 1.15rem; }
+  .process { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .process li { display: flex; flex-direction: column; gap: 8px; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .process strong { color: var(--accent); }
+  .process span { color: var(--muted); font-size: 13px; }
+  .topic-list { border-top: 1px solid var(--line); }
+  .topic { display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .number { color: var(--accent); font-size: 13px; font-weight: 800; }
+  .status { padding: 3px 9px; border-radius: 999px; background: var(--code); color: var(--muted); font-size: 11px; font-weight: 700; }
+  .status.done { background: var(--accent-soft); color: var(--accent); }
+  @media (max-width: 760px) { .process { grid-template-columns: 1fr; } .topic { grid-template-columns: 34px 1fr; } .status { grid-column: 2; justify-self: start; } }
+</style>

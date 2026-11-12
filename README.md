@@ -1,6 +1,10 @@
-# 재야호의 개발 기록
+# 재호의 백엔드 개발 기록
 
-문제를 분석하고 해결하는 과정을 기록하는 Astro 기반 개발 블로그입니다.
+실무에서 마주한 문제를 분석하고 해결 과정을 기록하는 Astro 기반 공식 블로그입니다.
+
+- 공식 원문: <https://jaeho99.github.io>
+- 재현 코드와 변경 이력: 이 GitHub 저장소
+- 요약·공유 채널: <https://velog.io/@dev_resolution>
 
 ## 로컬 실행
 
@@ -14,13 +18,16 @@ npm run dev
 - `src/data/site.ts`: 작성자, GitHub, 이메일
 - `astro.config.mjs`: 최종 공개 주소
 - `src/content/blog/`: Markdown 게시글
+- `src/pages/roadmap.astro`: 콘텐츠 로드맵
+- `examples/`: 글에서 사용하는 독립 재현 예제
+- `docs/writing-guide.md`: 작성 및 공개 원칙
 
-현재 권장 설정은 다음과 같습니다.
+현재 설정은 다음과 같습니다.
 
 - GitHub 사용자명: `jaeho99`
 - 저장소 이름: `jaeho99.github.io`
 - 기본 공개 주소: `https://jaeho99.github.io`
-- 개인 도메인 후보: `jaeyaho.dev` 또는 `jaeyaho.kr`
+- 공식 저장소: `jaeho99/jaeho99.github.io`
 
 ## 개인 도메인
 

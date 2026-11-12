@@ -31,11 +31,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <body>
     <header class="site-header">
       <a class="brand" href="/" aria-label="홈으로">
-        <span class="brand-mark">JY</span>
+        <span class="brand-mark">JH</span>
         <span>{SITE.title}</span>
       </a>
       <nav aria-label="주요 메뉴">
         <a href="/posts">기록</a>
+        <a href="/roadmap">로드맵</a>
         <a href="/about">소개</a>
         <a href="/rss.xml">RSS</a>
         <button id="theme-toggle" aria-label="색상 모드 변경">◐</button>
@@ -119,7 +120,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   @media (max-width: 640px) {
     .site-header { height: 72px; }
     .brand > span:last-child { display: none; }
-    nav { gap: 16px; }
+    nav { gap: 13px; }
+    nav a[href='/rss.xml'] { display: none; }
     footer { display: block; }
     footer span { display: block; }
   }
