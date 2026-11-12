@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { CATEGORIES } from '../../data/categories';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return CATEGORIES.map(category => ({
+    params: { slug: category.slug },
+    props: {
+      category,
+      posts: posts
+        .filter(post => post.data.category === category.name)
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { category, posts } = Astro.props;
+---
+<BaseLayout title={category.name} description={category.description}>
+  <section class="container page-head">
+    <a href="/categories">← 모든 카테고리</a>
+    <p class="eyebrow">Category</p>
+    <h1>{category.name}</h1>
+    <p>{category.description} · {posts.length}개의 글</p>
+  </section>
+  <section class="container list">{posts.map((post: any) => <PostCard post={post} />)}</section>
+</BaseLayout>
+<style>
+  .page-head { padding: 90px 0 54px; }
+  .page-head > a { color: var(--accent); font-size: 13px; font-weight: 700; }
+  .eyebrow { margin-top: 42px; }
+  h1 { margin: 8px 0; font-size: clamp(3rem, 8vw, 5rem); letter-spacing: -.06em; }
+  .page-head > p:last-child { color: var(--muted); }
+  .list { max-width: 850px; }
+</style>
+

@@ -2,6 +2,7 @@
 title: "LifeHub: 로컬 우선 생활 관리 시스템 구축기"
 description: "청소, 자산, 운동, 식재료와 레시피를 한곳에 모은 Spring Boot·React·PostgreSQL 로컬 웹앱의 설계와 실행 환경 문제 해결 과정입니다."
 pubDate: 2026-08-25
+category: "Project · Retrospective"
 tags: ["Codex", "Spring Boot", "React", "PostgreSQL"]
 ---
 

@@ -2,6 +2,7 @@
 title: "개발 기록을 시작하며"
 description: "무엇을 배웠는지가 아니라 어떤 문제를 어떻게 해결했는지 기록하려 합니다."
 pubDate: 2026-08-24
+category: "Project · Retrospective"
 tags: ["회고", "블로그"]
 ---
 

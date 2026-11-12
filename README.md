@@ -18,9 +18,17 @@ npm run dev
 - `src/data/site.ts`: 작성자, GitHub, 이메일
 - `astro.config.mjs`: 최종 공개 주소
 - `src/content/blog/`: Markdown 게시글
+- `src/pages/categories/`: 카테고리 목록과 카테고리별 글 목록
 - `src/pages/roadmap.astro`: 콘텐츠 로드맵
 - `examples/`: 글에서 사용하는 독립 재현 예제
 - `docs/writing-guide.md`: 작성 및 공개 원칙
+
+게시글 frontmatter에는 대표 `category` 하나와 세부 `tags`를 지정합니다.
+
+```yaml
+category: "Java · Spring"
+tags: ["Spring MVC", "Ajax", "Java"]
+```
 
 현재 설정은 다음과 같습니다.
 

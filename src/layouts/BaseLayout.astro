@@ -36,6 +36,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       </a>
       <nav aria-label="주요 메뉴">
         <a href="/posts">기록</a>
+        <a href="/categories">카테고리</a>
         <a href="/roadmap">로드맵</a>
         <a href="/about">소개</a>
         <a href="/rss.xml">RSS</a>
@@ -121,6 +122,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     .site-header { height: 72px; }
     .brand > span:last-child { display: none; }
     nav { gap: 13px; }
+    nav a[href='/posts'] { display: none; }
     nav a[href='/rss.xml'] { display: none; }
     footer { display: block; }
     footer span { display: block; }

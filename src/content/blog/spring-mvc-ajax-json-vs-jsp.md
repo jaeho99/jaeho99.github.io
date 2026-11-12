@@ -2,6 +2,7 @@
 title: 'Spring MVC에서 Ajax 요청 시 JSON 대신 JSP가 반환되는 이유'
 description: 'jQuery dataType을 json으로 지정했는데 HTML이 돌아오는 현상을 Spring MVC의 반환값 처리 흐름으로 분석합니다.'
 pubDate: 2026-11-12
+category: 'Java · Spring'
 tags: ['Spring MVC', 'Ajax', 'Java']
 draft: false
 ---

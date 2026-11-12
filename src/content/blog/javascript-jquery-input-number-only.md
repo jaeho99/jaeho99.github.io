@@ -2,6 +2,7 @@
 title: 'JavaScript·jQuery input 숫자만 입력받기: 정규식, 이벤트 위임, 한글 IME'
 description: 'maxlength만으로 해결되지 않는 숫자 입력을 paste, 동적 요소, 한글 IME까지 고려해 설계합니다.'
 pubDate: 2026-11-11
+category: 'JavaScript · Frontend'
 tags: ['JavaScript', 'jQuery', 'Validation']
 draft: false
 ---

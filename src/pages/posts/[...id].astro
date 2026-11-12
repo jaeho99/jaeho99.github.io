@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCategoryByName } from '../../data/categories';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -10,11 +11,13 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const date = post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+const category = getCategoryByName(post.data.category);
 ---
 <BaseLayout title={post.data.title} description={post.data.description}>
   <article class="prose">
     <header class="article-head">
       <a class="back" href="/posts">← 모든 기록</a>
+      {category && <a class="category" href={`/categories/${category.slug}/`}>{category.name}</a>}
       <div class="tags">{post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}</div>
       <h1>{post.data.title}</h1>
       <p class="description">{post.data.description}</p>
@@ -27,6 +30,7 @@ const date = post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', mo
   .article-head { margin-bottom: 70px; }
   .back { display: block; margin-bottom: 60px; color: var(--accent); font-size: 14px; font-weight: 700; }
   .tags { display: flex; gap: 7px; }
+  .category { display: inline-flex; margin-bottom: 10px; color: var(--accent); font-size: 13px; font-weight: 800; }
   .description { color: var(--muted); font-size: 1.15rem; }
   time { color: var(--muted); font-size: 13px; }
 </style>
