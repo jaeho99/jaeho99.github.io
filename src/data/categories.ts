@@ -14,6 +14,11 @@ export const CATEGORIES = [
     name: 'Project · Retrospective',
     description: '직접 만든 프로젝트의 설계, 구현과 성장 과정을 돌아봅니다.',
   },
+  {
+    slug: 'devops-infrastructure',
+    name: 'DevOps · Infrastructure',
+    description: '빌드, 배포 자동화와 서비스를 운영하는 기반 기술을 정리합니다.',
+  },
 ] as const;
 
 export type CategoryName = (typeof CATEGORIES)[number]['name'];

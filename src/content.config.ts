@@ -8,7 +8,7 @@ const blog = defineCollection({
     description: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    category: z.enum(['Java · Spring', 'JavaScript · Frontend', 'Project · Retrospective']),
+    category: z.enum(['Java · Spring', 'JavaScript · Frontend', 'DevOps · Infrastructure', 'Project · Retrospective']),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),
